@@ -50,15 +50,26 @@ links = [
 
 def get_nodes_from_links(links):
     nodes = {}
-
-
-
     for link in links:
         if link["from"] not in nodes:
-            nodes[link["from"]] = [link["to"]]
+            nodes[link["from"]] = [{
+                "node":link["to"],
+                "dist":link["dist"]
+            }]
         else:
-            nodes[link["from"]].append(link["to"])
+            nodes[link["from"]].append({
+                "node":link["to"],
+                "dist":link["dist"]
+            })
     return nodes
+
+
+def sort_set(my_set):
+    if my_set == []:
+        return []
+    pivot = my_set.pop(0)
+    return list(filter(lambda x: x["dist"] < pivot["dist"],my_set)) + [pivot] + list(filter(lambda x: x["dist"] >= pivot["dist"],my_set))
+
 
 
 def main(links,start,end):
@@ -74,29 +85,29 @@ def main(links,start,end):
     lst.pop(0)
     print(lst)
 
-    while end not in map(lambda x: x["node"],not_done_set):
+    # end not in map(lambda x: x["node"],not_done_set)
+    while len(not_done_set) > 0:
         # sort not_done_set
         not_done_set = sort_set(not_done_set)
 
         current_set = not_done_set.pop(0)
 
-        for link in nodes[current_set["node"]]:
-            not_done_set.append({
-                "node":link,
-                "dist":current_set["dist"]+nodes[""]
-            })
+        if current_set["node"] in nodes.keys():
+            for link in nodes[current_set["node"]]:
+                not_done_set.append({
+                    "node":link["node"],
+                    "dist":current_set["dist"]+link["dist"],
+                    "path":current_set["path"]+[current_set["node"]]
+                })
+
+        done_set.append(current_set)
+
+    print(done_set)
 
 
 
 
 main(links,"a","g")
-
-def sort_set(my_set):
-    if my_set == []:
-        return []
-    pivot = my_set.pop(0)
-    return filter(lambda x: my_set["dist"] < pivot["dist"],my_set) + [pivot] + filter(lambda x: my_set["dist"] >= pivot["dist"],my_set)
-
 
 def get_distance(links,prev,current):
     for link in links:
