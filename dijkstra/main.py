@@ -74,9 +74,19 @@ def main(links,start,end):
     lst.pop(0)
     print(lst)
 
-    while end not in map(lambda x: x["node"],done_set):
+    while end not in map(lambda x: x["node"],not_done_set):
         # sort not_done_set
         not_done_set = sort_set(not_done_set)
+
+        current_set = not_done_set.pop(0)
+
+        for link in nodes[current_set["node"]]:
+            not_done_set.append({
+                "node":link,
+                "dist":current_set["dist"]+nodes[""]
+            })
+
+
 
 
 main(links,"a","g")
@@ -86,3 +96,10 @@ def sort_set(my_set):
         return []
     pivot = my_set.pop(0)
     return filter(lambda x: my_set["dist"] < pivot["dist"],my_set) + [pivot] + filter(lambda x: my_set["dist"] >= pivot["dist"],my_set)
+
+
+def get_distance(links,prev,current):
+    for link in links:
+        if link["from"] == prev and link["to"] == current:
+            return link["dist"]
+    return False
