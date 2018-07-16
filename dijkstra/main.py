@@ -49,23 +49,40 @@ links = [
 ]
 
 def get_nodes_from_links(links):
-    nodes = []
+    nodes = {}
+
+
+
     for link in links:
-        if link["from"] not in [x["name"] for x in nodes]:
-            nodes.append({
-                "name":link["from"],
-                "links":[link["to"]]
-            })
+        if link["from"] not in nodes:
+            nodes[link["from"]] = [link["to"]]
         else:
-            [x for x in nodes if x["name"] == link["from"]][0]["links"].append(link["to"])
+            nodes[link["from"]].append(link["to"])
     return nodes
 
 
-def main(links):
-    print(get_nodes_from_links(links))
+def main(links,start,end):
+    nodes = (get_nodes_from_links(links))
     done_set = []
-    not_done_set = []
+    not_done_set = [{
+        "node":start,
+        "dist":0,
+        "path":[]
+    }]
+    lst = ["a","b","c"]
+    print(lst)
+    lst.pop(0)
+    print(lst)
 
-    
+    while end not in map(lambda x: x["node"],done_set):
+        # sort not_done_set
+        not_done_set = sort_set(not_done_set)
 
-main(links)
+
+main(links,"a","g")
+
+def sort_set(my_set):
+    if my_set == []:
+        return []
+    pivot = my_set.pop(0)
+    return filter(lambda x: my_set["dist"] < pivot["dist"],my_set) + [pivot] + filter(lambda x: my_set["dist"] >= pivot["dist"],my_set)
