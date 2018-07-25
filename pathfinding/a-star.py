@@ -34,8 +34,8 @@ def make_nodes(nodes=None,max_x=100,max_y=100,number_of_nodes=100):
             if len(nodes) >= number_of_nodes:
                 return nodes
 
-    while len(nodes) < number_of_nodes:
-        nodes = make_nodes(nodes=nodes,max_x=max_x,max_y=max_y,number_of_nodes=number_of_nodes-len(nodes))
+    #while len(nodes) < number_of_nodes:
+    #    nodes = make_nodes(nodes=nodes,max_x=max_x,max_y=max_y,number_of_nodes=number_of_nodes-len(nodes))
     return nodes
 
 
@@ -114,9 +114,9 @@ def sort_set(my_set):
 
 
 def main():
-    nodes,links = make_network(max_x=100,max_y=100,number_of_nodes=200)
+    nodes,links = make_network(max_x=20,max_y=20,number_of_nodes=250)
 
-    a_star(1,max(list(nodes.keys())),nodes)
+    a_star(0,max(list(nodes.keys())),nodes)
 
 
 main()
